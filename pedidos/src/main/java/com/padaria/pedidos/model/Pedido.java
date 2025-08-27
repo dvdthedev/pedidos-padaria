@@ -1,14 +1,18 @@
 package com.padaria.pedidos.model;
 
-<<<<<<< HEAD
-public class Pedido {
-=======
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
 
 @Entity
 public class Pedido {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String produto;
     private Double quantidade;
     private Double valorTotal;
@@ -18,6 +22,4 @@ public class Pedido {
     private Double valorSinal;
 
 
-
->>>>>>> 5a0e4cafab892a7158f015a6d3f31a3cae905b2e
 }
