@@ -2,7 +2,9 @@ package com.padaria.pedidos.services;
 
 import com.padaria.pedidos.model.Pedido;
 import com.padaria.pedidos.repositories.PedidoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,12 @@ public class PedidoService {
     public Pedido findById(Long id){
         Optional<Pedido> obj = pedidoRepository.findById(id);
         return obj.get();
+    }
+
+    @Transactional
+    public Pedido postPedido(Pedido pedido){
+        var obj = pedidoRepository.save(pedido);
+        return obj;
     }
 
 }

@@ -1,9 +1,6 @@
 package com.padaria.pedidos.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +14,8 @@ public class Pedido {
     private Double quantidade;
     private Double valorTotal;
     private LocalDateTime dataHora;
+    @Column(columnDefinition = "text")
+    private String descricao;
     private String nomeCliente;
     private String contato;
     private Double valorSinal;
