@@ -21,7 +21,7 @@ public class Pedido {
     private Double valorSinal;
 
     public Pedido(Long id, String produto, Double quantidade, Double valorTotal,
-                  LocalDateTime dataHora, String nomeCliente, String contato, Double valorSinal) {
+                  LocalDateTime dataHora,String descricao, String nomeCliente, String contato, Double valorSinal) {
         this.id = id;
         this.produto = produto;
         this.quantidade = quantidade;
@@ -30,6 +30,7 @@ public class Pedido {
         this.nomeCliente = nomeCliente;
         this.contato = contato;
         this.valorSinal = valorSinal;
+        this.descricao = descricao;
     }
 
     public Pedido() {
@@ -97,5 +98,13 @@ public class Pedido {
 
     public void setValorSinal(Double valorSinal) {
         this.valorSinal = valorSinal;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }

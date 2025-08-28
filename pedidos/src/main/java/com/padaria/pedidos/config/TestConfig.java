@@ -21,11 +21,14 @@ public class TestConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Pedido p1 = new Pedido(null, "Cachorro Quente", 50.0, 500.0,
-                LocalDateTime.of(2025, Month.AUGUST, 28, 17, 30),
-                "Deivid Rocha", "31997459829", 40.0);
-        Pedido p2 = new Pedido(null, "Cachorro Quente", 150.0, 300.0,
-                LocalDateTime.of(2025, Month.AUGUST, 29, 11, 30), "Renato Rocha", "31997459829", 40.0);
+                LocalDateTime.of(2025, Month.AUGUST, 28, 17, 30),"descricao"
+                , "Deivid Rocha", "31997459829", 40.0);
 
-        //pedidoRepository.saveAll(Arrays.asList(p1, p2));
+
+        Pedido p2 = new Pedido(null, "Cachorro Quente", 150.0, 300.0,
+                LocalDateTime.of(2025, Month.AUGUST, 29, 11, 30),"descricao diferente",
+                "Renato Rocha", "31997459829", 50.0);
+
+       //pedidoRepository.saveAll(Arrays.asList(p1, p2));
     }
 }

@@ -4,6 +4,7 @@ import com.padaria.pedidos.model.Pedido;
 import com.padaria.pedidos.services.PedidoService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,14 @@ public class PedidoController {
     public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido){
         var obj = service.postPedido(pedido);
         return ResponseEntity.ok().body(obj);
+    }
+
+    @PutMapping(value = "/{id}")
+    @Transactional
+    public ResponseEntity<Pedido> atualizarPedido(@PathVariable Long id, @RequestBody Pedido pedidoAtualizado){
+        return service.atualizarPedido(id, pedidoAtualizado).map(
+                pedido -> ResponseEntity.ok(pedido)
+        ).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
 }
