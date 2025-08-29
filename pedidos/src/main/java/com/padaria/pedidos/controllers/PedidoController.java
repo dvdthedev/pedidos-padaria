@@ -45,4 +45,11 @@ public class PedidoController {
         ).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    @DeleteMapping(value = "/{id}")
+    @Transactional
+    public ResponseEntity<Void> deletarPedido(@PathVariable Long id){
+        service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

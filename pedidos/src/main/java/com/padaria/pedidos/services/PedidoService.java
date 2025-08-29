@@ -4,9 +4,10 @@ import com.padaria.pedidos.model.Pedido;
 import com.padaria.pedidos.repositories.PedidoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,14 @@ public class PedidoService {
     public Pedido postPedido(Pedido pedido){
         var obj = pedidoRepository.save(pedido);
         return obj;
+    }
+
+    @Transactional
+    public void deleteById(Long id){
+        Optional<Pedido> pedidoOptional = this.pedidoRepository.findById(id);
+        if (pedidoOptional.isPresent()){
+            pedidoRepository.delete(pedidoOptional.get());
+        }else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "id não encontrado: " + id);
     }
 
     public Optional<Pedido> atualizarPedido(Long id, Pedido pedidoAtualizado){
