@@ -49,7 +49,7 @@ public class PedidoController {
     @Transactional
     public ResponseEntity<Void> deletarPedido(@PathVariable Long id){
         service.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 
 }
