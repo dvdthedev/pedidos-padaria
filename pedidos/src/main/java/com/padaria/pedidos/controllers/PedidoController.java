@@ -20,8 +20,14 @@ public class PedidoController {
     private PedidoService service;
 
     @GetMapping
-    public ResponseEntity<List<Pedido>> findAll(){
+    public ResponseEntity<List<Pedido>> pedidosFuturos(){
         List<Pedido> list = service.pedidosFuturos();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping(value = "/passado")
+    public ResponseEntity<List<Pedido>> pedidosPassado(){
+        List<Pedido> list = service.pedidosPassado();
         return ResponseEntity.ok().body(list);
     }
 
