@@ -18,8 +18,12 @@ public class PedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    public List<Pedido> findAll(){
-        return pedidoRepository.findAll();
+    public List<Pedido> pedidosFuturos(){
+        return pedidoRepository.pedidosFuturo();
+    }
+
+    public List<Pedido> pedidosPassado(){
+        return pedidoRepository.pedidosPassado();
     }
 
     public Pedido findById(Long id){

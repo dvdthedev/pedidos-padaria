@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@CrossOrigin
 @RequestMapping("/pedidos")
 public class PedidoController {
 
@@ -20,7 +21,7 @@ public class PedidoController {
 
     @GetMapping
     public ResponseEntity<List<Pedido>> findAll(){
-        List<Pedido> list = service.findAll();
+        List<Pedido> list = service.pedidosFuturos();
         return ResponseEntity.ok().body(list);
     }
 
