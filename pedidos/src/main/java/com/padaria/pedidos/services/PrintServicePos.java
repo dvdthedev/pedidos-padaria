@@ -17,7 +17,9 @@ public class PrintServicePos {
     private String nomeImpressora;
 
     public void imprimirRecibo(String corpoRecibo) throws IOException {
+        
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
+
         if (printService == null) {
             throw new IOException("Impressora não encontrada: " + nomeImpressora);
         }

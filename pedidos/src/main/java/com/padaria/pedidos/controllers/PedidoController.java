@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -19,7 +20,7 @@ public class PedidoController {
 
     @Autowired
     private PedidoService service;
-    
+
     @Autowired
     private PrintServicePos printServicePos;
 
@@ -43,8 +44,9 @@ public class PedidoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido){
+    public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) throws IOException {
         var obj = service.postPedido(pedido);
+        printServicePos.imprimirRecibo("Receibo");
         return ResponseEntity.ok().body(obj);
     }
 
