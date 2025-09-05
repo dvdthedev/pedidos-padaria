@@ -2,6 +2,7 @@ package com.padaria.pedidos.controllers;
 
 import com.padaria.pedidos.model.Pedido;
 import com.padaria.pedidos.services.PedidoService;
+import com.padaria.pedidos.services.PrintServicePos;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ public class PedidoController {
 
     @Autowired
     private PedidoService service;
+    
+    @Autowired
+    private PrintServicePos printServicePos;
 
     @GetMapping
     public ResponseEntity<List<Pedido>> pedidosFuturos(){
