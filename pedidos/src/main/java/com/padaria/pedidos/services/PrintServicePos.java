@@ -36,18 +36,19 @@ public class PrintServicePos {
             Style titleStyle = new Style()
                     .setFontSize(Style.FontSize._2, Style.FontSize._2)
                     .setJustification(EscPosConst.Justification.Center);
-
+           
             escpos.writeLF(titleStyle, "Padaria Tradição")
-                    .writeLF( "Data: " + java.time.LocalDate.now())
+                    .feed(1)
+                    .writeLF(titleStyle, java.time.LocalDate.now().format(formatadorData))
                     .feed(2)
                     .write("Cliente: " + pedido.getNomeCliente() + " " + pedido.getContato())
                     .feed(1)
-                    .writeLF("-------------------------------------------")
+                    .writeLF("------------------------------------------")
                     .writeLF(pedido.getProduto() +" UN/KG: " + pedido.getQuantidade()) // O conteúdo dinâmico vindo da API
                     .feed(1)
                     .writeLF("Observação: ")
                     .writeLF(pedido.getDescricao())
-                    .writeLF("-------------------------------------------")
+                    .writeLF("------------------------------------------")
                     .writeLF( "Entrega:  " +pedido.getDataHora().format(formatadorData) + " - " + pedido.getDataHora().format(formatadorHora))
                     .feed(3)
                     .cut(EscPos.CutMode.FULL); // Corta o papel
