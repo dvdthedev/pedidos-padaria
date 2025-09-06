@@ -4,20 +4,25 @@ import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.EscPosConst;
 import com.github.anastaciocintra.escpos.Style;
 import com.github.anastaciocintra.output.PrinterOutputStream;
+import com.padaria.pedidos.model.Pedido;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.print.PrintService;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class PrintServicePos {
 
     @Value("${impressora.nome}")
     private String nomeImpressora;
+    DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm");
 
-    public void imprimirRecibo(String corpoRecibo) throws IOException {
-        
+
+    public void imprimirRecibo(Pedido pedido) throws IOException {
+
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
 
         if (printService == null) {
@@ -26,19 +31,23 @@ public class PrintServicePos {
         try (PrinterOutputStream printerOutputStream = new PrinterOutputStream(printService);
              EscPos escpos = new EscPos(printerOutputStream)) {
 
-            // Exemplo de como usar a API fluente do escpos-coffee
+            escpos.setCharacterCodeTable(EscPos.CharacterCodeTable.WPC1252);
+
             Style titleStyle = new Style()
                     .setFontSize(Style.FontSize._2, Style.FontSize._2)
                     .setJustification(EscPosConst.Justification.Center);
 
-            escpos.writeLF(titleStyle, "MEU RESTAURANTE")
+            escpos.writeLF(titleStyle, "Padaria Tradição" + " Data: " + java.time.LocalDate.now())
                     .feed(2)
-                    .write("Cliente: " + "Fulano de Tal")
-                    .writeLF("Data: " + java.time.LocalDate.now())
+                    .write("Cliente: " + pedido.getNomeCliente() + " " + pedido.getContato())
                     .feed(1)
                     .writeLF("----------------------------------------")
-                    .writeLF(corpoRecibo) // O conteúdo dinâmico vindo da API
+                    .writeLF(pedido.getProduto() +" UN/KG: " + pedido.getQuantidade()) // O conteúdo dinâmico vindo da API
+                    .feed(1)
+                    .writeLF("Observação: ")
+                    .writeLF(pedido.getDescricao())
                     .writeLF("----------------------------------------")
+                    .writeLF(pedido.getDataHora().format(formatadorData) + " " + pedido.getDataHora().format(formatadorHora))
                     .feed(2)
                     .writeLF(new Style().setJustification(EscPosConst.Justification.Center), "Obrigado pela preferência!")
                     .feed(3)
