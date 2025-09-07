@@ -24,7 +24,7 @@ public class PrintServicePos {
     public void imprimirRecibo(Pedido pedido) throws IOException {
 
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
-        StringBuilder linhaAtual = new StringBuilder();
+        StringBuilder linhaAtual2 = new StringBuilder();
         String[] palavras = pedido.getDescricao().split(" ");
 
         if (printService == null) {
@@ -53,18 +53,18 @@ public class PrintServicePos {
 
                     //Laço para quebrar linhas em campos maiores que 40chars
                     for (String palavra : palavras) {
-                        if (linhaAtual.length() + palavra.length() + 1 <= 40) {
-                            if (linhaAtual.length() > 0) {
-                                linhaAtual.append(" ");
+                        if (linhaAtual2.length() + palavra.length() + 1 <= 40) {
+                            if (linhaAtual2.length() > 0) {
+                                linhaAtual2.append(" ");
                             }
-                            linhaAtual.append(palavra);
+                            linhaAtual2.append(palavra);
                         } else {
-                            escpos.writeLF(linhaAtual.toString());
-                            linhaAtual = new StringBuilder(palavra);
+                            escpos.writeLF(linhaAtual2.toString());
+                            linhaAtual2 = new StringBuilder(palavra);
                         }
                     }
-                    if (linhaAtual.length() > 0) {
-                        escpos.writeLF(linhaAtual.toString());
+                    if (linhaAtual2.length() > 0) {
+                        escpos.writeLF(linhaAtual2.toString());
                     }
 
                     escpos
@@ -80,19 +80,19 @@ public class PrintServicePos {
                             .writeLF("------------------------------------------")
                             .writeLF("Observação: ");
 
-                            for (String palavra : palavras) {
-                                if (linhaAtual.length() + palavra.length() + 1 <= 40) {
-                                    if (linhaAtual.length() > 0) {
-                                        linhaAtual.append(" ");
+                            for (String palavra2 : palavras) {
+                                if (linhaAtual2.length() + palavra2.length() + 1 <= 40) {
+                                    if (linhaAtual2.length() > 0) {
+                                        linhaAtual2.append(" ");
                                     }
-                                    linhaAtual.append(palavra);
+                                    linhaAtual2.append(palavra2);
                                 } else {
-                                    escpos.writeLF(linhaAtual.toString());
-                                    linhaAtual = new StringBuilder(palavra);
+                                    escpos.writeLF(linhaAtual2.toString());
+                                    linhaAtual2 = new StringBuilder(palavra2);
                                 }
                             }
-                            if (linhaAtual.length() > 0) {
-                                escpos.writeLF(linhaAtual.toString());
+                            if (linhaAtual2.length() > 0) {
+                                escpos.writeLF(linhaAtual2.toString());
                             }
                     escpos.writeLF("------------------------------------------")
                             .writeLF("Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
