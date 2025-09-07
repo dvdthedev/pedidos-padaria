@@ -44,7 +44,7 @@ public class PrintServicePos {
                     .feed(1)
                     .writeLF(centerStyle, java.time.LocalDate.now().format(formatadorData))
                     .feed(1)
-                    .write("Contato: (31) 9 8267-2984")
+                    .write(centerStyle,"Contato: (31) 9 8267-2984")
                     .feed(1)
                     .writeLF("------------------------------------------")
                     .writeLF(pedido.getProduto() +" UN/KG: " + pedido.getQuantidade()) // O conteúdo dinâmico vindo da API
@@ -73,6 +73,32 @@ public class PrintServicePos {
                     .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
+
+                    escpos.writeLF(titleStyle, pedido.getProduto())
+                            .feed(1)
+                            .writeLF(titleStyle ,pedido.getDataHora().format(formatadorData))
+                            .writeLF("------------------------------------------")
+                            .writeLF("Observação: ");
+
+                            for (String palavra : palavras) {
+                                if (linhaAtual.length() + palavra.length() + 1 <= 40) {
+                                    if (linhaAtual.length() > 0) {
+                                        linhaAtual.append(" ");
+                                    }
+                                    linhaAtual.append(palavra);
+                                } else {
+                                    escpos.writeLF(linhaAtual.toString());
+                                    linhaAtual = new StringBuilder(palavra);
+                                }
+                            }
+                            if (linhaAtual.length() > 0) {
+                                escpos.writeLF(linhaAtual.toString());
+                            }
+                    escpos.writeLF("------------------------------------------")
+                            .writeLF("Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
+                            .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato());
+
+
 
         } catch (Exception e) {
             throw new IOException("Erro ao tentar imprimir: " + e.getMessage(), e);
