@@ -43,8 +43,8 @@ public class PrintServicePos {
             escpos.writeLF(titleStyle, "Padaria Tradição")
                     .feed(1)
                     .writeLF(centerStyle, java.time.LocalDate.now().format(formatadorData))
-                    .feed(2)
-                    .write("Cliente: " + pedido.getNomeCliente() + " " + pedido.getContato())
+                    .feed(1)
+                    .write("Contato: (31) 9 8267-2984")
                     .feed(1)
                     .writeLF("------------------------------------------")
                     .writeLF(pedido.getProduto() +" UN/KG: " + pedido.getQuantidade()) // O conteúdo dinâmico vindo da API
@@ -70,6 +70,7 @@ public class PrintServicePos {
                     escpos
                     .writeLF("------------------------------------------")
                     .writeLF( "Entrega:  " +pedido.getDataHora().format(formatadorData) + " - " + pedido.getDataHora().format(formatadorHora))
+                    .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
 
