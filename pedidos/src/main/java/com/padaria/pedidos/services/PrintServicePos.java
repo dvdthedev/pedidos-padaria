@@ -96,7 +96,9 @@ public class PrintServicePos {
                             }
                     escpos.writeLF("------------------------------------------")
                             .writeLF("Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
-                            .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato());
+                            .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
+                            .feed(3)
+                            .cut(EscPos.CutMode.FULL);
 
 
 
