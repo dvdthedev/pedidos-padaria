@@ -20,7 +20,7 @@ public class PrintServicePos {
     DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm");
 
-    StringBuilder linhaAtual = new StringBuilder();
+
     Style titleStyle = new Style()
             .setFontSize(Style.FontSize._2, Style.FontSize._2)
             .setJustification(EscPosConst.Justification.Center);
@@ -29,6 +29,7 @@ public class PrintServicePos {
     public void imprimirRecibo(Pedido pedido) throws IOException {
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
         String[] palavras = pedido.getDescricao().split(" ");
+        StringBuilder linhaAtual = new StringBuilder();
 
         if (printService == null) {
             throw new IOException("Impressora não encontrada: " + nomeImpressora);
@@ -72,6 +73,7 @@ public class PrintServicePos {
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
 
+                    escpos.close();
         } catch (Exception e) {
             throw new IOException("Erro ao tentar imprimir: " + e.getMessage(), e);
         }
@@ -82,6 +84,7 @@ public class PrintServicePos {
     public void imprimirViaProducao(Pedido pedido) throws IOException{
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
         String[] palavras = pedido.getDescricao().split(" ");
+        StringBuilder linhaAtual = new StringBuilder();
         if (printService == null) {
             throw new IOException("Impressora não encontrada: " + nomeImpressora);
         }
@@ -96,15 +99,15 @@ public class PrintServicePos {
                     .writeLF("------------------------------------------")
                     .writeLF("Observação: ");
 
-            for (String palavra2 : palavras) {
-                if (linhaAtual.length() + palavra2.length() + 1 <= 40) {
+            for (String palavra : palavras) {
+                if (linhaAtual.length() + palavra.length() + 1 <= 40) {
                     if (linhaAtual.length() > 0) {
                         linhaAtual.append(" ");
                     }
-                    linhaAtual.append(palavra2);
+                    linhaAtual.append(palavra);
                 } else {
                     escpos.writeLF(linhaAtual.toString());
-                    linhaAtual = new StringBuilder(palavra2);
+                    linhaAtual = new StringBuilder(palavra);
                 }
             }
             if (linhaAtual.length() > 0) {
