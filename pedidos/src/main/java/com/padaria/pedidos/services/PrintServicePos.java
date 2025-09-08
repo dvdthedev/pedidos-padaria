@@ -95,7 +95,7 @@ public class PrintServicePos {
 
             escpos.writeLF(titleStyle, pedido.getProduto())
                     .feed(1)
-                    .writeLF(titleStyle ,pedido.getDataHora().format(formatadorData))
+                    .writeLF(titleStyle ,"UN/KG: "+  pedido.getQuantidade() + " - " +pedido.getDataHora().format(formatadorData))
                     .writeLF("------------------------------------------")
                     .writeLF("Observação: ");
 
@@ -118,6 +118,7 @@ public class PrintServicePos {
                     .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
+            escpos.close();
 
 
         } catch (Exception e) {
