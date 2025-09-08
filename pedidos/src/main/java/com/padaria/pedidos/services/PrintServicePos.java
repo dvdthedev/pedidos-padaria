@@ -19,7 +19,7 @@ public class PrintServicePos {
     private String nomeImpressora;
     DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm");
-    PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
+
     StringBuilder linhaAtual = new StringBuilder();
     Style titleStyle = new Style()
             .setFontSize(Style.FontSize._2, Style.FontSize._2)
@@ -27,7 +27,7 @@ public class PrintServicePos {
     Style centerStyle = new Style().setJustification(EscPosConst.Justification.Center);
 
     public void imprimirRecibo(Pedido pedido) throws IOException {
-
+        PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
         String[] palavras = pedido.getDescricao().split(" ");
 
         if (printService == null) {
@@ -80,6 +80,7 @@ public class PrintServicePos {
     }
 
     public void imprimirViaProducao(Pedido pedido) throws IOException{
+        PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
         String[] palavras = pedido.getDescricao().split(" ");
         if (printService == null) {
             throw new IOException("Impressora não encontrada: " + nomeImpressora);
