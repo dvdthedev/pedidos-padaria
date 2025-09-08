@@ -19,12 +19,15 @@ public class PrintServicePos {
     private String nomeImpressora;
     DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm");
-
+    PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
+    StringBuilder linhaAtual = new StringBuilder();
+    Style titleStyle = new Style()
+            .setFontSize(Style.FontSize._2, Style.FontSize._2)
+            .setJustification(EscPosConst.Justification.Center);
+    Style centerStyle = new Style().setJustification(EscPosConst.Justification.Center);
 
     public void imprimirRecibo(Pedido pedido) throws IOException {
 
-        PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
-        StringBuilder linhaAtual2 = new StringBuilder();
         String[] palavras = pedido.getDescricao().split(" ");
 
         if (printService == null) {
@@ -35,11 +38,6 @@ public class PrintServicePos {
 
             escpos.setCharacterCodeTable(EscPos.CharacterCodeTable.WPC1252);
 
-            Style titleStyle = new Style()
-                    .setFontSize(Style.FontSize._2, Style.FontSize._2)
-                    .setJustification(EscPosConst.Justification.Center);
-            Style centerStyle = new Style().setJustification(EscPosConst.Justification.Center);
-           
             escpos.writeLF(titleStyle, "Padaria Tradição")
                     .feed(1)
                     .writeLF(centerStyle, java.time.LocalDate.now().format(formatadorData))
@@ -53,18 +51,18 @@ public class PrintServicePos {
 
                     //Laço para quebrar linhas em campos maiores que 40chars
                     for (String palavra : palavras) {
-                        if (linhaAtual2.length() + palavra.length() + 1 <= 40) {
-                            if (linhaAtual2.length() > 0) {
-                                linhaAtual2.append(" ");
+                        if (linhaAtual.length() + palavra.length() + 1 <= 40) {
+                            if (linhaAtual.length() > 0) {
+                                linhaAtual.append(" ");
                             }
-                            linhaAtual2.append(palavra);
+                            linhaAtual.append(palavra);
                         } else {
-                            escpos.writeLF(linhaAtual2.toString());
-                            linhaAtual2 = new StringBuilder(palavra);
+                            escpos.writeLF(linhaAtual.toString());
+                            linhaAtual = new StringBuilder(palavra);
                         }
                     }
-                    if (linhaAtual2.length() > 0) {
-                        escpos.writeLF(linhaAtual2.toString());
+                    if (linhaAtual.length() > 0) {
+                        escpos.writeLF(linhaAtual.toString());
                     }
 
                     escpos
@@ -74,40 +72,57 @@ public class PrintServicePos {
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
 
-                    escpos.writeLF(titleStyle, pedido.getProduto())
-                            .feed(1)
-                            .writeLF(titleStyle ,pedido.getDataHora().format(formatadorData))
-                            .writeLF("------------------------------------------")
-                            .writeLF("Observação: ");
+        } catch (Exception e) {
+            throw new IOException("Erro ao tentar imprimir: " + e.getMessage(), e);
+        }
 
-                            for (String palavra2 : palavras) {
-                                if (linhaAtual2.length() + palavra2.length() + 1 <= 40) {
-                                    if (linhaAtual2.length() > 0) {
-                                        linhaAtual2.append(" ");
-                                    }
-                                    linhaAtual2.append(palavra2);
-                                } else {
-                                    escpos.writeLF(linhaAtual2.toString());
-                                    linhaAtual2 = new StringBuilder(palavra2);
-                                }
-                            }
-                            if (linhaAtual2.length() > 0) {
-                                escpos.writeLF(linhaAtual2.toString());
-                            }
-                    escpos.writeLF("------------------------------------------")
-                            .writeLF("Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
-                            .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
-                            .feed(3)
-                            .cut(EscPos.CutMode.FULL);
 
+    }
+
+    public void imprimirViaProducao(Pedido pedido) throws IOException{
+        String[] palavras = pedido.getDescricao().split(" ");
+        if (printService == null) {
+            throw new IOException("Impressora não encontrada: " + nomeImpressora);
+        }
+        try (PrinterOutputStream printerOutputStream = new PrinterOutputStream(printService);
+             EscPos escpos = new EscPos(printerOutputStream)) {
+
+            escpos.setCharacterCodeTable(EscPos.CharacterCodeTable.WPC1252);
+
+            escpos.writeLF(titleStyle, pedido.getProduto())
+                    .feed(1)
+                    .writeLF(titleStyle ,pedido.getDataHora().format(formatadorData))
+                    .writeLF("------------------------------------------")
+                    .writeLF("Observação: ");
+
+            for (String palavra2 : palavras) {
+                if (linhaAtual.length() + palavra2.length() + 1 <= 40) {
+                    if (linhaAtual.length() > 0) {
+                        linhaAtual.append(" ");
+                    }
+                    linhaAtual.append(palavra2);
+                } else {
+                    escpos.writeLF(linhaAtual.toString());
+                    linhaAtual = new StringBuilder(palavra2);
+                }
+            }
+            if (linhaAtual.length() > 0) {
+                escpos.writeLF(linhaAtual.toString());
+            }
+            escpos.writeLF("------------------------------------------")
+                    .writeLF("Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
+                    .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
+                    .feed(3)
+                    .cut(EscPos.CutMode.FULL);
 
 
         } catch (Exception e) {
             throw new IOException("Erro ao tentar imprimir: " + e.getMessage(), e);
         }
+
+
     }
 }
 
 
-                    //.feed(2)
-                   //.writeLF(new Style().setJustification(EscPosConst.Justification.Center), "Obrigado pela preferência!")
+

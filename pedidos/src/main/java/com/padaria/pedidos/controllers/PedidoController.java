@@ -47,6 +47,7 @@ public class PedidoController {
     public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) throws IOException {
         var obj = service.postPedido(pedido);
         printServicePos.imprimirRecibo(pedido);
+        printServicePos.imprimirViaProducao(pedido);
         return ResponseEntity.ok().body(obj);
     }
 
