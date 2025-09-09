@@ -25,7 +25,7 @@ public class PrintServicePos {
     private int size1Leng = 40;
 
 
-    private void escreverComQuebraLinha(EscPos escpos, String texto, int limiteCaracteres) throws IOException {
+    private void escreverComQuebraLinha(EscPos escpos, String texto, int limiteCaracteres, Style style) throws IOException {
         String[] palavras = texto.split(" ");
         StringBuilder linhaAtual = new StringBuilder();
 
@@ -46,10 +46,14 @@ public class PrintServicePos {
         }
     }
 
+    Style greatStyle = new Style()
+            .setFontSize(Style.FontSize._3, Style.FontSize._3)
+            .setJustification(EscPosConst.Justification.Center);
     Style titleStyle = new Style()
             .setFontSize(Style.FontSize._2, Style.FontSize._2)
             .setJustification(EscPosConst.Justification.Center);
     Style centerStyle = new Style().setJustification(EscPosConst.Justification.Center);
+    Style commom = new Style();
 
     public void imprimirRecibo(Pedido pedido) throws IOException {
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
@@ -76,7 +80,7 @@ public class PrintServicePos {
                     .writeLF("Observação: ");
 
 
-                    escreverComQuebraLinha(escpos, pedido.getDescricao(), size1Leng);
+                    escreverComQuebraLinha(escpos, pedido.getDescricao(), size1Leng, commom);
 
                     escpos
                     .writeLF("------------------------------------------")
@@ -105,14 +109,15 @@ public class PrintServicePos {
 
             escpos.setCharacterCodeTable(EscPos.CharacterCodeTable.WPC1252);
 
-            escpos.writeLF(titleStyle, pedido.getProduto())
+            escreverComQuebraLinha(escpos, pedido.getProduto(), size3Leng, greatStyle);
+                    escpos
                     .feed(1)
-                    .writeLF(titleStyle ,"UN/KG: "+  pedido.getQuantidade() + " - " +pedido.getDataHora().format(formatadorData))
+                    .writeLF(titleStyle ,"UN/KG: "+  pedido.getQuantidade() + " - \n" +pedido.getDataHora().format(formatadorData))
                     .writeLF("------------------------------------------")
                     .writeLF("Observação: ");
 
-            escreverComQuebraLinha(escpos, pedido.getDescricao(), size1Leng);
-            
+            escreverComQuebraLinha(escpos, pedido.getDescricao(), size1Leng, commom);
+
             escpos.writeLF("------------------------------------------")
                     .writeLF("Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
                     .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
