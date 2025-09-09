@@ -36,13 +36,13 @@ public class PrintServicePos {
                 }
                 linhaAtual.append(palavra);
             } else {
-                escpos.writeLF(linhaAtual.toString());
+                escpos.writeLF(style ,linhaAtual.toString());
                 linhaAtual = new StringBuilder(palavra);
             }
         }
 
         if (linhaAtual.length() > 0) {
-            escpos.writeLF(linhaAtual.toString());
+            escpos.writeLF(style, linhaAtual.toString());
         }
     }
 
@@ -112,7 +112,7 @@ public class PrintServicePos {
             escreverComQuebraLinha(escpos, pedido.getProduto(), size3Leng, greatStyle);
                     escpos
                     .feed(1)
-                    .writeLF(titleStyle ,"UN/KG: "+  pedido.getQuantidade() + " - \n" +pedido.getDataHora().format(formatadorData))
+                    .writeLF(titleStyle ,"UN/KG: "+  pedido.getQuantidade() + "\n" +pedido.getDataHora().format(formatadorData))
                     .writeLF("------------------------------------------")
                     .writeLF("Observação: ");
 
