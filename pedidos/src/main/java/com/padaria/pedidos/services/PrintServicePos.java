@@ -20,6 +20,31 @@ public class PrintServicePos {
     DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm");
 
+    private int size3Leng = 15;
+    private int size2Leng = 21;
+    private int size1Leng = 40;
+
+
+    private void escreverComQuebraLinha(EscPos escpos, String texto, int limiteCaracteres) throws IOException {
+        String[] palavras = texto.split(" ");
+        StringBuilder linhaAtual = new StringBuilder();
+
+        for (String palavra : palavras) {
+            if (linhaAtual.length() + palavra.length() + 1 <= limiteCaracteres) {
+                if (linhaAtual.length() > 0) {
+                    linhaAtual.append(" ");
+                }
+                linhaAtual.append(palavra);
+            } else {
+                escpos.writeLF(linhaAtual.toString());
+                linhaAtual = new StringBuilder(palavra);
+            }
+        }
+
+        if (linhaAtual.length() > 0) {
+            escpos.writeLF(linhaAtual.toString());
+        }
+    }
 
     Style titleStyle = new Style()
             .setFontSize(Style.FontSize._2, Style.FontSize._2)
@@ -50,21 +75,8 @@ public class PrintServicePos {
                     .feed(1)
                     .writeLF("Observação: ");
 
-                    //Laço para quebrar linhas em campos maiores que 40chars
-                    for (String palavra : palavras) {
-                        if (linhaAtual.length() + palavra.length() + 1 <= 40) {
-                            if (linhaAtual.length() > 0) {
-                                linhaAtual.append(" ");
-                            }
-                            linhaAtual.append(palavra);
-                        } else {
-                            escpos.writeLF(linhaAtual.toString());
-                            linhaAtual = new StringBuilder(palavra);
-                        }
-                    }
-                    if (linhaAtual.length() > 0) {
-                        escpos.writeLF(linhaAtual.toString());
-                    }
+
+                    escreverComQuebraLinha(escpos, pedido.getDescricao(), size1Leng);
 
                     escpos
                     .writeLF("------------------------------------------")
@@ -99,20 +111,8 @@ public class PrintServicePos {
                     .writeLF("------------------------------------------")
                     .writeLF("Observação: ");
 
-            for (String palavra : palavras) {
-                if (linhaAtual.length() + palavra.length() + 1 <= 40) {
-                    if (linhaAtual.length() > 0) {
-                        linhaAtual.append(" ");
-                    }
-                    linhaAtual.append(palavra);
-                } else {
-                    escpos.writeLF(linhaAtual.toString());
-                    linhaAtual = new StringBuilder(palavra);
-                }
-            }
-            if (linhaAtual.length() > 0) {
-                escpos.writeLF(linhaAtual.toString());
-            }
+            escreverComQuebraLinha(escpos, pedido.getDescricao(), size1Leng);
+            
             escpos.writeLF("------------------------------------------")
                     .writeLF("Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
                     .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
