@@ -20,7 +20,7 @@ public class PrintServicePos {
     DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm");
 
-    private int size3Leng = 15;
+    private int size3Leng = 14;
     private int size2Leng = 21;
     private int size1Leng = 40;
 
@@ -112,7 +112,7 @@ public class PrintServicePos {
             escreverComQuebraLinha(escpos, pedido.getProduto(), size3Leng, greatStyle);
                     escpos
                     .feed(1)
-                    .writeLF(titleStyle ,"UN/KG: "+  pedido.getQuantidade() + "\n" +pedido.getDataHora().format(formatadorData))
+                    .writeLF(titleStyle ,  pedido.getQuantidade() + "KG ou Unidade\n" +pedido.getDataHora().format(formatadorData))
                     .writeLF("------------------------------------------")
                     .writeLF("Observação: ");
 
