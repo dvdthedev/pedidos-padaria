@@ -21,9 +21,6 @@ public class PedidoController {
     @Autowired
     private PedidoService service;
 
-    @Autowired
-    private PrintServicePos printServicePos;
-
     @GetMapping
     public ResponseEntity<List<Pedido>> pedidosFuturos(){
         List<Pedido> list = service.pedidosFuturos();
@@ -46,8 +43,6 @@ public class PedidoController {
     @Transactional
     public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) throws IOException {
         var obj = service.postPedido(pedido);
-        printServicePos.imprimirRecibo(pedido);
-        printServicePos.imprimirViaProducao(pedido);
         return ResponseEntity.ok().body(obj);
     }
 

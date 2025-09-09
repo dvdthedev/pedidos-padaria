@@ -28,7 +28,7 @@ public class PrintServicePos {
     private void escreverComQuebraLinha(EscPos escpos, String texto, int limiteCaracteres, Style style) throws IOException {
         String[] palavras = texto.split(" ");
         StringBuilder linhaAtual = new StringBuilder();
-
+        try{
         for (String palavra : palavras) {
             if (linhaAtual.length() + palavra.length() + 1 <= limiteCaracteres) {
                 if (linhaAtual.length() > 0) {
@@ -40,9 +40,11 @@ public class PrintServicePos {
                 linhaAtual = new StringBuilder(palavra);
             }
         }
-
         if (linhaAtual.length() > 0) {
             escpos.writeLF(style, linhaAtual.toString());
+        }
+        } catch (IOException e) {
+            throw new IOException(e);
         }
     }
 
@@ -79,7 +81,6 @@ public class PrintServicePos {
                     .feed(1)
                     .writeLF("Observação: ");
 
-
                     escreverComQuebraLinha(escpos, pedido.getDescricao(), size1Leng, commom);
 
                     escpos
@@ -89,12 +90,9 @@ public class PrintServicePos {
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
 
-                    escpos.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new IOException("Erro ao tentar imprimir: " + e.getMessage(), e);
         }
-
-
     }
 
     public void imprimirViaProducao(Pedido pedido) throws IOException{
@@ -110,13 +108,12 @@ public class PrintServicePos {
             escpos.setCharacterCodeTable(EscPos.CharacterCodeTable.WPC1252);
 
             escreverComQuebraLinha(escpos, pedido.getProduto(), size3Leng, greatStyle);
-                    escpos
-                    .feed(1)
+                    escpos.feed(1)
                     .writeLF(titleStyle ,  pedido.getQuantidade() + "KG ou Unidade\n" +pedido.getDataHora().format(formatadorData))
                     .writeLF("------------------------------------------")
                     .writeLF("Observação: ");
 
-            escreverComQuebraLinha(escpos, pedido.getDescricao(), size1Leng, commom);
+            escreverComQuebraLinha(escpos, pedido.getDescricao(), size2Leng, titleStyle);
 
             escpos.writeLF("------------------------------------------")
                     .writeLF("Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
@@ -126,11 +123,9 @@ public class PrintServicePos {
             escpos.close();
 
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new IOException("Erro ao tentar imprimir: " + e.getMessage(), e);
         }
-
-
     }
 }
 

@@ -2,13 +2,16 @@ package com.padaria.pedidos.services;
 
 import com.padaria.pedidos.model.Pedido;
 import com.padaria.pedidos.repositories.PedidoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +20,9 @@ public class PedidoService {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private PrintServicePos printService;
 
     public List<Pedido> pedidosFuturos(){
         return pedidoRepository.pedidosFuturo();
@@ -28,12 +34,13 @@ public class PedidoService {
 
     public Pedido findById(Long id){
         Optional<Pedido> obj = pedidoRepository.findById(id);
-        return obj.get();
+        return obj.orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado: " + id));
     }
 
     @Transactional
-    public Pedido postPedido(Pedido pedido){
+    public Pedido postPedido(Pedido pedido) throws IOException {
         var obj = pedidoRepository.save(pedido);
+        imprimirAsync(pedido);
         return obj;
     }
 
@@ -46,7 +53,7 @@ public class PedidoService {
     }
 
     public Optional<Pedido> atualizarPedido(Long id, Pedido pedidoAtualizado){
-        return pedidoRepository.findById(id)
+        Optional<Pedido> pedidoOptional = pedidoRepository.findById(id)
                 .map(pedidoExistente -> {
                     Optional.ofNullable(pedidoAtualizado.getNomeCliente())
                             .filter(StringUtils::hasText)
@@ -78,6 +85,17 @@ public class PedidoService {
                         }
                 );
 
+        pedidoOptional.ifPresent(this::imprimirAsync);
+    return pedidoOptional;
     }
 
+    @Async
+    public void imprimirAsync(Pedido pedido){
+        try{
+            printService.imprimirRecibo(pedido);
+            printService.imprimirViaProducao(pedido);
+        } catch (IOException e){
+            System.err.println("Erro ao imprimir pedido " + pedido.getId() + ": " + e.getMessage());
+        }
+    }
 }
