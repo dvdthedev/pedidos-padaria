@@ -40,7 +40,7 @@ public class PedidoService {
     @Transactional
     public Pedido postPedido(Pedido pedido) throws IOException {
         var obj = pedidoRepository.save(pedido);
-        //imprimirAsync(pedido);
+        imprimirAsync(pedido);
         return obj;
     }
 
@@ -85,7 +85,7 @@ public class PedidoService {
                         }
                 );
 
-        //pedidoOptional.ifPresent(this::imprimirAsync);
+        pedidoOptional.ifPresent(this::imprimirAsync);
     return pedidoOptional;
     }
 
