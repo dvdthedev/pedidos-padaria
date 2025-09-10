@@ -118,7 +118,7 @@ public class PrintServicePos {
             escreverComQuebraLinha(escpos, pedido.getDescricao(), size2Leng, titleStyle);
 
             escpos.writeLF("------------------------------------------")
-                    .writeLF("Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
+                    .writeLF(centerStyle,"Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
                     .writeLF(centerStyle,"Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
