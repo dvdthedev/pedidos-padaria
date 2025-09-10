@@ -19,10 +19,11 @@ public class PrintServicePos {
     private String nomeImpressora;
     DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm");
+    DateTimeFormatter formatadorDataHora = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    private int size3Leng = 14;
-    private int size2Leng = 21;
-    private int size1Leng = 40;
+    private final int size3Leng = 14;
+    private final int size2Leng = 21;
+    private final int size1Leng = 40;
 
 
     private void escreverComQuebraLinha(EscPos escpos, String texto, int limiteCaracteres, Style style) throws IOException {
@@ -109,7 +110,8 @@ public class PrintServicePos {
 
             escreverComQuebraLinha(escpos, pedido.getProduto(), size3Leng, greatStyle);
                     escpos.feed(1)
-                    .writeLF(titleStyle ,  pedido.getQuantidade() + "KG ou Unidade\n" +pedido.getDataHora().format(formatadorData))
+                    .writeLF(titleStyle ,  pedido.getQuantidade() + "KG ou Unidade\n"
+                            +pedido.getDataHora().format(formatadorDataHora))
                     .writeLF("------------------------------------------")
                     .writeLF("Observação: ");
 
@@ -117,11 +119,9 @@ public class PrintServicePos {
 
             escpos.writeLF("------------------------------------------")
                     .writeLF("Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
-                    .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
+                    .writeLF(centerStyle,"Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
-            escpos.close();
-
 
         } catch (IOException e) {
             throw new IOException("Erro ao tentar imprimir: " + e.getMessage(), e);
