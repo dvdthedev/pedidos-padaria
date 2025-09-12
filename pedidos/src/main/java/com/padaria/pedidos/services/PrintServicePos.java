@@ -78,7 +78,7 @@ public class PrintServicePos {
                     .write(centerStyle,"Contato: (31) 9 8267-2984")
                     .feed(1)
                     .writeLF("------------------------------------------")
-                    .writeLF(pedido.getProduto() +" UN/KG: " + pedido.getQuantidade()) // O conteúdo dinâmico vindo da API
+                    .writeLF(pedido.getProduto() +" UN/KG: " + pedido.getQuantidade())
                     .feed(1)
                     .writeLF("Observação: ");
 
