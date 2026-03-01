@@ -19,10 +19,16 @@ import java.util.Optional;
 public class PedidoService {
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private final PedidoRepository pedidoRepository;
 
     @Autowired
-    private PrintServicePos printService;
+    private final PrintServicePos printService;
+
+    public PedidoService(PedidoRepository pedidoRepository, PrintServicePos printService) {
+        this.pedidoRepository = pedidoRepository;
+        this.printService = printService;
+    }
+
 
     public List<Pedido> pedidosFuturos(){
         return pedidoRepository.pedidosFuturo();
@@ -38,7 +44,7 @@ public class PedidoService {
     }
 
     @Transactional
-    public Pedido postPedido(Pedido pedido) throws IOException {
+    public Pedido postPedido(Pedido pedido) {
         var obj = pedidoRepository.save(pedido);
         imprimirAsync(pedido);
         return obj;
