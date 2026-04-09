@@ -19,7 +19,11 @@ import java.util.List;
 public class PedidoController {
 
     @Autowired
-    private PedidoService service;
+    private final PedidoService service;
+
+    public PedidoController(PedidoService service){
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<Pedido>> pedidosFuturos(){
