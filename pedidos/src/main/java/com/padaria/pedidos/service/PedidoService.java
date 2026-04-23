@@ -1,10 +1,9 @@
-package com.padaria.pedidos.services;
+package com.padaria.pedidos.service;
 
 import com.padaria.pedidos.model.Pedido;
 import com.padaria.pedidos.repositories.PedidoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,10 +17,8 @@ import java.util.Optional;
 @Service
 public class PedidoService {
 
-    @Autowired
     private final PedidoRepository pedidoRepository;
 
-    @Autowired
     private final PrintServicePos printService;
 
     public PedidoService(PedidoRepository pedidoRepository, PrintServicePos printService) {

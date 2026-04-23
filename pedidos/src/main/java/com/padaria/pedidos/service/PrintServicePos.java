@@ -1,4 +1,4 @@
-package com.padaria.pedidos.services;
+package com.padaria.pedidos.service;
 
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.EscPosConst;

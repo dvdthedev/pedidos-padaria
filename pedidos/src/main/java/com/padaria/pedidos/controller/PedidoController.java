@@ -1,10 +1,9 @@
-package com.padaria.pedidos.controllers;
+package com.padaria.pedidos.controller;
 
 import com.padaria.pedidos.model.Pedido;
-import com.padaria.pedidos.services.PedidoService;
-import com.padaria.pedidos.services.PrintServicePos;
+import com.padaria.pedidos.service.PedidoService;
+import com.padaria.pedidos.service.PrintServicePos;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +17,6 @@ import java.util.List;
 @RequestMapping("/pedidos")
 public class PedidoController {
 
-    @Autowired
     private final PedidoService service;
 
     public PedidoController(PedidoService service){
