@@ -1,7 +1,8 @@
 package com.padaria.pedidos.services;
 
 import com.padaria.pedidos.model.Pedido;
-import com.padaria.pedidos.repositories.PedidoRepository;
+import com.padaria.pedidos.repository.PedidoRepository;
+import com.padaria.pedidos.service.PedidoService;
 import com.padaria.pedidos.service.PrintServicePos;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.*;
 class PedidoServiceTest {
 
     @InjectMocks
-    private PedidoSecirvice pedidoService;
+    private PedidoService pedidoService;
 
     @Mock
     private PedidoRepository pedidoRepository;

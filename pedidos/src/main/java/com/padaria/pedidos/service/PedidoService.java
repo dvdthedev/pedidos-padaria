@@ -56,7 +56,8 @@ public class PedidoService {
     }
 
     public Optional<Pedido> atualizarPedido(Long id, Pedido pedidoAtualizado){
-        Optional<Pedido> pedidoOptional = pedidoRepository.findById(id)
+        Optional<Pedido>
+                pedidoOptional = pedidoRepository.findById(id)
                 .map(pedidoExistente -> {
                     Optional.ofNullable(pedidoAtualizado.getNomeCliente())
                             .filter(StringUtils::hasText)
