@@ -2,7 +2,6 @@ package com.padaria.pedidos.services;
 
 import com.padaria.pedidos.model.Pedido;
 import com.padaria.pedidos.repositories.PedidoRepository;
-import com.padaria.pedidos.service.PedidoService;
 import com.padaria.pedidos.service.PrintServicePos;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +24,7 @@ import static org.mockito.Mockito.*;
 class PedidoServiceTest {
 
     @InjectMocks
-    private PedidoService pedidoService;
+    private PedidoSecirvice pedidoService;
 
     @Mock
     private PedidoRepository pedidoRepository;
@@ -71,8 +70,8 @@ class PedidoServiceTest {
         verify(pedidoRepository, times(1)).save(pedido);
         
         try {
-            verify(printService, times(1)).imprimirRecibo(pedido);
-            verify(printService, times(1)).imprimirViaProducao(pedido);
+            verify(printService, times(1)).imprimirReciboCliente(pedido);
+            verify(printService, times(1)).imprimirReciboProducao(pedido);
         } catch (Exception e) {
             fail("Não deveria lançar exceção na verificação do mock");
         }

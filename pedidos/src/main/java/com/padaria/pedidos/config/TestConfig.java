@@ -1,13 +1,12 @@
 package com.padaria.pedidos.config;
 import com.padaria.pedidos.model.Pedido;
-import com.padaria.pedidos.repositories.PedidoRepository;
+import com.padaria.pedidos.repository.PedidoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Arrays;
 
 @Configuration
 @Profile("test")

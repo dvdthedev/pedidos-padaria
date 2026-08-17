@@ -1,4 +1,4 @@
-package com.padaria.pedidos.repositories;
+package com.padaria.pedidos.repository;
 
 import com.padaria.pedidos.model.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;

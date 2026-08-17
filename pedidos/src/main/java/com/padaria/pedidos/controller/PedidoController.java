@@ -2,7 +2,6 @@ package com.padaria.pedidos.controller;
 
 import com.padaria.pedidos.model.Pedido;
 import com.padaria.pedidos.service.PedidoService;
-import com.padaria.pedidos.service.PrintServicePos;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

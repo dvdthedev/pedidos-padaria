@@ -32,7 +32,7 @@ public class PrintServicePos {
         try{
         for (String palavra : palavras) {
             if (linhaAtual.length() + palavra.length() + 1 <= limiteCaracteres) {
-                if (linhaAtual.length() > 0) {
+                if (!linhaAtual.isEmpty()) {
                     linhaAtual.append(" ");
                 }
                 linhaAtual.append(palavra);
@@ -41,7 +41,7 @@ public class PrintServicePos {
                 linhaAtual = new StringBuilder(palavra);
             }
         }
-        if (linhaAtual.length() > 0) {
+        if (!linhaAtual.isEmpty()) {
             escpos.writeLF(style, linhaAtual.toString());
         }
         } catch (IOException e) {
@@ -58,7 +58,7 @@ public class PrintServicePos {
     Style centerStyle = new Style().setJustification(EscPosConst.Justification.Center);
     Style commom = new Style();
 
-    public void imprimirRecibo(Pedido pedido) throws IOException {
+    public void imprimirReciboCliente(Pedido pedido) throws IOException {
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
         String[] palavras = pedido.getDescricao().split(" ");
         StringBuilder linhaAtual = new StringBuilder();
@@ -96,7 +96,7 @@ public class PrintServicePos {
         }
     }
 
-    public void imprimirViaProducao(Pedido pedido) throws IOException{
+    public void imprimirReciboProducao(Pedido pedido) throws IOException{
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
         String[] palavras = pedido.getDescricao().split(" ");
         StringBuilder linhaAtual = new StringBuilder();

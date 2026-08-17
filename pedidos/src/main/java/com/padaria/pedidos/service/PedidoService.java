@@ -1,7 +1,7 @@
 package com.padaria.pedidos.service;
 
 import com.padaria.pedidos.model.Pedido;
-import com.padaria.pedidos.repositories.PedidoRepository;
+import com.padaria.pedidos.repository.PedidoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,7 @@ public class PedidoService {
     @Transactional
     public Pedido postPedido(Pedido pedido) {
         var obj = pedidoRepository.save(pedido);
-        imprimirAsync(pedido);
+        //imprimirAsync(pedido);
         return obj;
     }
 
@@ -88,15 +88,15 @@ public class PedidoService {
                         }
                 );
 
-        pedidoOptional.ifPresent(this::imprimirAsync);
+        //pedidoOptional.ifPresent(this::imprimirAsync);
     return pedidoOptional;
     }
 
     @Async
     public void imprimirAsync(Pedido pedido){
         try{
-            printService.imprimirRecibo(pedido);
-            printService.imprimirViaProducao(pedido);
+            printService.imprimirReciboCliente(pedido);
+            printService.imprimirReciboProducao(pedido);
         } catch (IOException e){
             System.err.println("Erro ao imprimir pedido " + pedido.getId() + ": " + e.getMessage());
         }
