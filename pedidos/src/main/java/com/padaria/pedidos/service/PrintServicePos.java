@@ -25,6 +25,19 @@ public class PrintServicePos {
     private final int size2Leng = 21;
     private final int size1Leng = 40;
 
+    private String obterUnidadeFormatada(Character unidade) {
+        if (unidade == null) {
+            return "UN";
+        }
+        return switch (unidade) {
+            case 'u' -> "UN";
+            case 'k' -> "KG";
+            case 'g' -> "G";
+            case 'l' -> "L";
+            default -> "UN";
+        };
+    }
+
 
     private void escreverComQuebraLinha(EscPos escpos, String texto, int limiteCaracteres, Style style) throws IOException {
         String[] palavras = texto.split(" ");
@@ -60,8 +73,6 @@ public class PrintServicePos {
 
     public void imprimirReciboCliente(Pedido pedido) throws IOException {
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
-        String[] palavras = pedido.getDescricao().split(" ");
-        StringBuilder linhaAtual = new StringBuilder();
 
         if (printService == null) {
             throw new IOException("Impressora não encontrada: " + nomeImpressora);
@@ -78,7 +89,7 @@ public class PrintServicePos {
                     .write(centerStyle,"Contato: (31) 9 8267-2984")
                     .feed(1)
                     .writeLF("------------------------------------------")
-                    .writeLF(pedido.getProduto() +" UN/KG: " + pedido.getQuantidade())
+                    .writeLF(pedido.getProduto() + ": " + pedido.getQuantidade() +" "+ obterUnidadeFormatada(pedido.getUnidade()))
                     .feed(1)
                     .writeLF("Observação: ");
 
@@ -98,8 +109,6 @@ public class PrintServicePos {
 
     public void imprimirReciboProducao(Pedido pedido) throws IOException{
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
-        String[] palavras = pedido.getDescricao().split(" ");
-        StringBuilder linhaAtual = new StringBuilder();
         if (printService == null) {
             throw new IOException("Impressora não encontrada: " + nomeImpressora);
         }
@@ -110,7 +119,7 @@ public class PrintServicePos {
 
             escreverComQuebraLinha(escpos, pedido.getProduto(), size3Leng, greatStyle);
                     escpos.feed(1)
-                    .writeLF(titleStyle ,  pedido.getQuantidade() + "KG ou Unidade\n"
+                    .writeLF(titleStyle ,  pedido.getQuantidade() + obterUnidadeFormatada(pedido.getUnidade()) + "\n"
                             +pedido.getDataHora().format(formatadorDataHora))
                     .writeLF("------------------------------------------")
                     .writeLF("Observação: ");
@@ -120,6 +129,7 @@ public class PrintServicePos {
             escpos.writeLF("------------------------------------------")
                     .writeLF(centerStyle,"Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
                     .writeLF(centerStyle,"Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
+                    .writeLF(centerStyle,"Total:  " +pedido.getValorTotal() + " - Sinal: " + pedido.getValorSinal() + "Restante: " + (pedido.getValorTotal() - pedido.getValorSinal()))
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
 

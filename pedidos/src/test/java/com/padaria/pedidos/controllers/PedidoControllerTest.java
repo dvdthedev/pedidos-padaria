@@ -35,7 +35,7 @@ class PedidoControllerTest {
 
     @BeforeEach
     void setUp() {
-        pedido = new Pedido(1L, "Bolo de Cenoura", 1.0, 45.0, LocalDateTime.now(), "Com cobertura", "Maria", "31988888888", 20.0);
+        pedido = new Pedido(1L, "Bolo de Cenoura", 1.0, 'u', 45.0, LocalDateTime.now(), "Com cobertura", "Maria", "31988888888", 20.0);
     }
 
     @Test

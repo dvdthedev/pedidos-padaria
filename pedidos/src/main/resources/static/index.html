@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -39,7 +39,15 @@
             <div class="grid grid-rows-3 gap-4">
                 <div class="form-group">
                     <label for="produto" class="block text-gray-700 font-medium mb-2">Produto Principal</label>
-                    <input type="text" id="produto" name="produto" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+                    <div class="flex gap-3">
+                        <input type="text" id="produto" name="produto" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+                        <select id="unidade" name="unidade" aria-label="Tipo de unidade" class="w-32 px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+                            <option value="u" selected>Unidade</option>
+                            <option value="k">Quilograma</option>
+                            <option value="g">Grama</option>
+                            <option value="l">Litro</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="nomeCliente" class="block text-gray-700 font-medium mb-2">Nome do Cliente</label>
@@ -55,7 +63,7 @@
             <div class="grid grid-rows-3 gap-4">
                 <div class="form-group">
                     <label for="quantidade" class="block text-gray-700 font-medium mb-2">Quantidade (Ex: 2.5 para 2,5kg)</label>
-                    <input type="number" id="quantidade" name="quantidade" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+                    <input type="text" id="quantidade" name="quantidade" inputmode="decimal" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" required>
                 </div>
                 
                 <!-- Linha com Data e Hora -->

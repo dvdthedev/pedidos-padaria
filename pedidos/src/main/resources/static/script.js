@@ -45,6 +45,7 @@ class DOMElements {
         // Campos do formulário
         this.campos = {
             produto: document.getElementById('produto'),
+            unidade: document.getElementById('unidade'),
             quantidade: document.getElementById('quantidade'),
             valorTotal: document.getElementById('valorTotal'),
             descricao: document.getElementById('descricao'),
@@ -351,6 +352,7 @@ class UIController {
     preencherFormulario(pedido) {
         this.dom.pedidoIdInput.value = pedido.id;
         this.dom.campos.produto.value = pedido.produto;
+        this.dom.campos.unidade.value = pedido.unidade || 'u';
         this.dom.campos.quantidade.value = pedido.quantidade;
         this.dom.campos.valorTotal.value = pedido.valorTotal;
         this.dom.campos.descricao.value = pedido.descricao;
@@ -630,7 +632,8 @@ class GerenciadorPedidos {
             valorSinal: parseFloat(campos.valorSinal.value) || 0,
             pedidoData: {
                 produto: campos.produto.value,
-                quantidade: parseFloat(campos.quantidade.value),
+                quantidade: parseFloat(campos.quantidade.value.replace(',', '.')),
+                unidade: campos.unidade.value,
                 valorTotal: parseFloat(campos.valorTotal.value) || 0,
                 descricao: campos.descricao.value,
                 nomeCliente: campos.nomeCliente.value,

@@ -37,7 +37,7 @@ class PedidoServiceTest {
 
     @BeforeEach
     void setUp() {
-        pedido = new Pedido(1L, "Cachorro Quente", 2.0, 30.0, LocalDateTime.now(), "Sem mostarda", "João", "31999999999", 0.0);
+        pedido = new Pedido(1L, "Cachorro Quente", 2.0, 'u', 30.0, LocalDateTime.now(), "Sem mostarda", "João", "31999999999", 0.0);
     }
 
     @Test
@@ -114,6 +114,7 @@ class PedidoServiceTest {
         Pedido pedidoAtualizado = new Pedido();
         pedidoAtualizado.setNomeCliente("Maria");
         pedidoAtualizado.setProduto("Hamburguer");
+        pedidoAtualizado.setUnidade('k');
 
         when(pedidoRepository.findById(1L)).thenReturn(Optional.of(pedido));
         when(pedidoRepository.save(any(Pedido.class))).thenReturn(pedido);
@@ -123,6 +124,22 @@ class PedidoServiceTest {
         assertTrue(resultado.isPresent());
         assertEquals("Maria", pedido.getNomeCliente());
         assertEquals("Hamburguer", pedido.getProduto());
+        assertEquals('k', pedido.getUnidade());
+        verify(pedidoRepository, times(1)).findById(1L);
+        verify(pedidoRepository, times(1)).save(pedido);
+    }
+    @Test
+    void atualizarPedido_QuandoUnidadeU_DeveAtualizarUnidade() {
+        Pedido pedidoAtualizado = new Pedido();
+        pedidoAtualizado.setUnidade('u');
+
+        when(pedidoRepository.findById(1L)).thenReturn(Optional.of(pedido));
+        when(pedidoRepository.save(any(Pedido.class))).thenReturn(pedido);
+
+        Optional<Pedido> resultado = pedidoService.atualizarPedido(1L, pedidoAtualizado);
+
+        assertTrue(resultado.isPresent());
+        assertEquals('u', pedido.getUnidade());
         verify(pedidoRepository, times(1)).findById(1L);
         verify(pedidoRepository, times(1)).save(pedido);
     }

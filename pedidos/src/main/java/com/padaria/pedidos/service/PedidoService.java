@@ -76,6 +76,9 @@ public class PedidoService {
                     Optional.ofNullable(pedidoAtualizado.getQuantidade())
                             .ifPresent(pedidoExistente::setQuantidade);
 
+                    Optional.ofNullable(pedidoAtualizado.getUnidade())
+                            .ifPresent(pedidoExistente::setUnidade);
+
                     Optional.ofNullable(pedidoAtualizado.getValorSinal())
                             .ifPresent(pedidoExistente::setValorSinal);
 

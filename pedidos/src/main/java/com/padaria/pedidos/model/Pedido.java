@@ -12,6 +12,7 @@ public class Pedido {
     private Long id;
     private String produto;
     private Double quantidade;
+    private Character unidade;
     private Double valorTotal;
     private LocalDateTime dataHora;
     @Column(columnDefinition = "text")
@@ -20,11 +21,12 @@ public class Pedido {
     private String contato;
     private Double valorSinal;
 
-    public Pedido(Long id, String produto, Double quantidade, Double valorTotal,
+    public Pedido(Long id, String produto, Double quantidade, Character unidade, Double valorTotal,
                   LocalDateTime dataHora,String descricao, String nomeCliente, String contato, Double valorSinal) {
         this.id = id;
         this.produto = produto;
         this.quantidade = quantidade;
+        this.unidade = unidade;
         this.valorTotal = valorTotal;
         this.dataHora = dataHora;
         this.nomeCliente = nomeCliente;
@@ -58,6 +60,14 @@ public class Pedido {
 
     public void setQuantidade(Double quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public Character getUnidade() {
+        return unidade;
+    }
+
+    public void setUnidade(Character unidade) {
+        this.unidade = unidade;
     }
 
     public Double getValorTotal() {
