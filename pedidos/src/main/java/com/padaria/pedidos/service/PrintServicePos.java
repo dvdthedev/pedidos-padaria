@@ -38,6 +38,20 @@ public class PrintServicePos {
         };
     }
 
+    private String obterQuantidadeFormatada(Double quantidade) {
+        if (quantidade == null) {
+            return "";
+        }
+
+        if (quantidade % 1 == 0) {
+            return String.format("%.0f", quantidade);
+        }
+
+        return String.format("%.2f", quantidade)
+                .replaceAll("0+$", "")
+                .replaceAll("\\.$", "");
+    }
+
 
     private void escreverComQuebraLinha(EscPos escpos, String texto, int limiteCaracteres, Style style) throws IOException {
         String[] palavras = texto.split(" ");
@@ -69,7 +83,7 @@ public class PrintServicePos {
             .setFontSize(Style.FontSize._2, Style.FontSize._2)
             .setJustification(EscPosConst.Justification.Center);
     Style centerStyle = new Style().setJustification(EscPosConst.Justification.Center);
-    Style commom = new Style();
+    Style commomStyle = new Style();
 
     public void imprimirReciboCliente(Pedido pedido) throws IOException {
         PrintService printService = PrinterOutputStream.getPrintServiceByName(nomeImpressora);
@@ -89,16 +103,26 @@ public class PrintServicePos {
                     .write(centerStyle,"Contato: (31) 9 8267-2984")
                     .feed(1)
                     .writeLF("------------------------------------------")
-                    .writeLF(pedido.getProduto() + ": " + pedido.getQuantidade() +" "+ obterUnidadeFormatada(pedido.getUnidade()))
+                    .writeLF(
+                            pedido.getProduto() + ": "
+                                    + obterQuantidadeFormatada(pedido.getQuantidade())
+                                    + " "
+                                    + obterUnidadeFormatada(pedido.getUnidade())
+                    )
                     .feed(1)
                     .writeLF("Observação: ");
 
-                    escreverComQuebraLinha(escpos, pedido.getDescricao(), size1Leng, commom);
+                    escreverComQuebraLinha(escpos, pedido.getDescricao(), size1Leng, commomStyle);
 
                     escpos
                     .writeLF("------------------------------------------")
                     .writeLF( "Entrega:  " +pedido.getDataHora().format(formatadorData) + " - " + pedido.getDataHora().format(formatadorHora))
                     .writeLF( "Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
+                    .writeLF(centerStyle, String.format("Valor: %.2f - Sinal: %.2f - Restante: %.2f",
+                    pedido.getValorTotal(),
+                    pedido.getValorSinal(),
+                    (pedido.getValorTotal() - pedido.getValorSinal())
+            ))
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
 
@@ -119,8 +143,11 @@ public class PrintServicePos {
 
             escreverComQuebraLinha(escpos, pedido.getProduto(), size3Leng, greatStyle);
                     escpos.feed(1)
-                    .writeLF(titleStyle ,  pedido.getQuantidade() + obterUnidadeFormatada(pedido.getUnidade()) + "\n"
-                            +pedido.getDataHora().format(formatadorDataHora))
+                            .writeLF(titleStyle,obterQuantidadeFormatada(pedido.getQuantidade())
+                                            + obterUnidadeFormatada(pedido.getUnidade())
+                                            + "\n"
+                                            + pedido.getDataHora().format(formatadorDataHora)
+                            )
                     .writeLF("------------------------------------------")
                     .writeLF("Observação: ");
 
@@ -129,7 +156,11 @@ public class PrintServicePos {
             escpos.writeLF("------------------------------------------")
                     .writeLF(centerStyle,"Hora da entrega: " + pedido.getDataHora().format(formatadorHora))
                     .writeLF(centerStyle,"Cliente:  " +pedido.getNomeCliente() + " - " + pedido.getContato())
-                    .writeLF(centerStyle,"Total:  " +pedido.getValorTotal() + " - Sinal: " + pedido.getValorSinal() + "Restante: " + (pedido.getValorTotal() - pedido.getValorSinal()))
+                    .writeLF(centerStyle, String.format("Valor: %.2f - Sinal: %.2f - Restante: %.2f",
+                            pedido.getValorTotal(),
+                            pedido.getValorSinal(),
+                            (pedido.getValorTotal() - pedido.getValorSinal())
+                    ))
                     .feed(3)
                     .cut(EscPos.CutMode.FULL);
 
